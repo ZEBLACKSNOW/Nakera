@@ -1,0 +1,3727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nakera AI; Enterprise-grade AI Agents</title>
+<meta name="description" content="Nakera AI designs and deploys custom AI agents for operations, support, sales, and back-office work. Built in Dubai. Trusted across MENA and Africa." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #000000;
+    --bg-soft: #0a0a0a;
+    --bg-light: #ffffff;
+    --ink: #ffffff;
+    --ink-dim: rgba(255, 255, 255, 0.55);
+    --ink-faint: rgba(255, 255, 255, 0.35);
+    --ink-on-light: #0a0a0a;
+    --ink-on-light-dim: rgba(10, 10, 10, 0.55);
+
+    --purple: #5b3fc4;
+    --purple-bright: #8b6ee6;
+    --purple-deep: #3d2891;
+    --purple-soft: rgba(139, 110, 230, 0.3);
+
+    --line: rgba(255, 255, 255, 0.1);
+    --line-strong: rgba(255, 255, 255, 0.18);
+    --line-light: rgba(10, 10, 10, 0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  a { color: inherit; text-decoration: none; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    overflow-x: hidden;
+    letter-spacing: -0.01em;
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  .display {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+  }
+  .serif { font-family: 'Inter', sans-serif; font-style: normal; font-weight: 500; color: var(--purple-bright); }
+  /* Safeguard: no italic anywhere on the site */
+  em, i, cite, dfn, address, var { font-style: normal; }
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+
+  /* ============ NAV ============ */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s;
+  }
+  nav.scrolled { border-bottom-color: var(--line); }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+  }
+  .nav-logo svg { width: 22px; height: 18px; color: var(--purple-bright); }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 13px;
+    color: var(--ink-dim);
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+
+  .nav-cta {
+    padding: 10px 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .nav-cta:hover {
+    background: var(--purple);
+    border-color: var(--purple);
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    padding: 0 24px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Top light beams; like Yara's */
+  .hero-lights {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    right: 0;
+    height: 500px;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .light-beam {
+    position: absolute;
+    top: 80px;
+    width: 800px;
+    height: 200px;
+    background: linear-gradient(270deg, rgba(139, 110, 230, 0) 0%, rgba(139, 110, 230, 0.15) 50%, rgba(139, 110, 230, 0.4) 100%);
+    filter: blur(40px);
+    mix-blend-mode: screen;
+    transform: rotate(108deg);
+  }
+  .light-beam.beam-1 { left: -10%; }
+  .light-beam.beam-2 { right: -10%; transform: rotate(72deg); }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 1200px;
+    width: 100%;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px 6px 6px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    margin-bottom: 48px;
+    font-size: 12px;
+    color: var(--ink-dim);
+    opacity: 0;
+    animation: fade-in 1s 0.2s forwards;
+  }
+  .hero-eyebrow .pill {
+    background: var(--purple);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .hero-headline {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: clamp(48px, 11vw, 146px);
+    line-height: 0.9;
+    letter-spacing: -0.045em;
+    margin-bottom: 0;
+    opacity: 0;
+    animation: fade-up 1.2s 0.4s forwards;
+  }
+  .hero-headline .line-2 { color: var(--ink); }
+  .hero-headline em.serif {
+    font-style: normal;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    color: var(--purple-bright);
+    letter-spacing: -0.045em;
+  }
+
+  /* Vertical light beam under the headline (Yara signature) */
+  .headline-beam {
+    width: 1px;
+    height: 200px;
+    margin: 60px auto 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.6) 50%, transparent 100%);
+    position: relative;
+    opacity: 0;
+    animation: fade-in 1s 1s forwards;
+  }
+  .headline-beam::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 6px;
+    height: 6px;
+    background: var(--purple-bright);
+    border-radius: 50%;
+    box-shadow: 0 0 20px var(--purple-bright);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes fade-in { to { opacity: 1; } }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    50% { transform: translate(-50%, -50%) scale(1.4); opacity: 0.6; }
+  }
+
+  /* ============ SUB-HERO SECTION ============ */
+  .sub-hero {
+    padding: 40px 32px 100px;
+    position: relative;
+    z-index: 2;
+  }
+  .sub-hero-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 80px;
+    align-items: end;
+  }
+  .sub-hero-text {
+    font-size: clamp(18px, 1.6vw, 22px);
+    line-height: 1.5;
+    color: var(--ink);
+    font-weight: 400;
+    max-width: 580px;
+  }
+  .sub-hero-text em.serif {
+    color: var(--ink-dim);
+    font-size: 1.05em;
+  }
+  .sub-hero-ctas {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 24px;
+    background: white;
+    color: var(--bg);
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .btn-primary:hover {
+    background: var(--purple-bright);
+    color: white;
+    transform: translateY(-2px);
+  }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 24px;
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--purple-bright);
+  }
+  .btn-primary svg, .btn-secondary svg { transition: transform 0.3s; }
+  .btn-primary:hover svg, .btn-secondary:hover svg { transform: translateX(3px); }
+
+  @media (max-width: 900px) {
+    .sub-hero-inner { grid-template-columns: 1fr; gap: 32px; }
+    .sub-hero-ctas { justify-content: flex-start; }
+  }
+
+  /* ============ ABSTRACT VISUALS REMOVED ============ */
+  /* (kept clean; no gradient ticker cards) */
+
+  /* ============ SECTION HEADLINE ============ */
+  .section-headline {
+    padding: 80px 32px 48px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .section-headline h2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    max-width: 20ch;
+  }
+  .section-headline h2 .serif {
+    color: var(--purple-bright);
+    font-weight: 400;
+  }
+
+  /* ============ STICKY SCROLL SECTION (Yara's signature) ============ */
+  .sticky-scroll {
+    padding: 64px 32px 128px;
+    max-width: 1440px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: flex-start;
+  }
+  .scroll-text-col {
+    position: sticky;
+    top: 120px;
+    border-left: 2px solid #222;
+    padding-left: 0;
+    align-self: flex-start;
+  }
+  .scroll-item {
+    padding: 24px 0 24px 24px;
+    border-left: 4px solid transparent;
+    margin-left: -2px;
+    transition: all 0.5s;
+    opacity: 0.35;
+  }
+  .scroll-item.active {
+    border-left-color: var(--purple);
+    opacity: 1;
+  }
+  .scroll-item h3 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+  .scroll-item p {
+    font-size: 15px;
+    color: var(--ink-dim);
+    line-height: 1.55;
+    max-width: 460px;
+  }
+
+  /* Product mockup cards in sticky scroll */
+  .scroll-images-col {
+    position: relative;
+    min-height: 1400px;
+  }
+  .scroll-image-group {
+    height: 477px;
+    position: sticky;
+    top: 120px;
+    margin-bottom: 80px;
+    overflow: hidden;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #0c0c10 0%, #050507 100%);
+    border: 1px solid var(--line);
+    padding: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mockup: agent dashboard */
+  .mock {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    padding: 20px;
+    backdrop-filter: blur(20px);
+  }
+  .mock-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .mock-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .mock-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, var(--purple-bright), var(--purple-deep));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .mock-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    border-radius: 100px;
+    background: rgba(139, 110, 230, 0.15);
+    color: var(--purple-bright);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .mock-badge::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--purple-bright);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .mock-msg {
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    max-width: 85%;
+  }
+  .mock-msg.user {
+    background: rgba(255, 255, 255, 0.06);
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+  }
+  .mock-msg.bot {
+    background: rgba(91, 63, 196, 0.18);
+    border: 1px solid rgba(139, 110, 230, 0.25);
+    border-bottom-left-radius: 4px;
+  }
+  .mock-action {
+    margin-top: 12px;
+    padding: 8px 12px;
+    background: rgba(139, 110, 230, 0.08);
+    border: 1px solid rgba(139, 110, 230, 0.2);
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--purple-bright);
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mock-action::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+  }
+
+  /* Mockup: stats grid */
+  .mock-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .mock-stat {
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  .mock-stat .val {
+    font-family: 'Inter', sans-serif;
+    font-size: 24px;
+    color: white;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .mock-stat .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+
+  /* Mockup: integrations grid */
+  .mock-integrations {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .mock-int {
+    aspect-ratio: 1;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--ink-dim);
+    letter-spacing: 0.03em;
+    transition: all 0.3s;
+  }
+  .mock-int:hover {
+    border-color: var(--purple-bright);
+    color: var(--purple-bright);
+    background: rgba(139, 110, 230, 0.05);
+  }
+
+  @media (max-width: 900px) {
+    .sticky-scroll { grid-template-columns: 1fr; gap: 32px; }
+    .scroll-text-col { position: static; }
+    .scroll-images-col { min-height: auto; }
+    .scroll-image-group { position: static; height: auto; min-height: 320px; margin-bottom: 24px; padding: 20px; }
+    .mock { max-width: 100%; }
+  }
+
+  /* ============ FOUNDERS CTA SECTION ============ */
+  .founders-section {
+    background: #fff;
+    color: var(--ink-on-light);
+    padding: 120px 32px;
+    position: relative;
+  }
+  .founders-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, white 0%, #e6e6e6 47%, white 95%);
+    width: 1px;
+    height: 663px;
+    left: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none; /* center divider option */
+  }
+  .founders-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .founders-headline h2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 24px;
+    color: var(--ink-on-light);
+  }
+  .founders-headline h2 .serif {
+    color: var(--purple);
+    font-weight: 400;
+  }
+  .founders-headline p {
+    font-size: 17px;
+    color: var(--ink-on-light-dim);
+    line-height: 1.55;
+    max-width: 460px;
+    margin-bottom: 32px;
+  }
+  .founders-headline .btn-primary {
+    background: var(--ink-on-light);
+    color: white;
+  }
+  .founders-headline .btn-primary:hover {
+    background: var(--purple);
+    color: white;
+  }
+
+  .founders-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .founder-card {
+    background: white;
+    border: 1px solid rgba(10, 10, 10, 0.1);
+    border-radius: 16px;
+    padding: 28px;
+    transition: all 0.3s;
+  }
+  .founder-card:hover {
+    border-color: var(--purple);
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px -20px rgba(91, 63, 196, 0.25);
+  }
+  .founder-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--purple-bright), var(--purple-deep));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  .founder-role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 8px;
+  }
+  .founder-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 24px;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+    line-height: 1.05;
+  }
+  .founder-bio {
+    font-size: 13px;
+    color: var(--ink-on-light-dim);
+    line-height: 1.55;
+    margin-bottom: 16px;
+  }
+  .founder-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .founder-tags .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 100px;
+    background: rgba(91, 63, 196, 0.08);
+    color: var(--purple);
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 900px) {
+    .founders-inner { grid-template-columns: 1fr; gap: 48px; }
+    .founders-cards { grid-template-columns: 1fr; }
+  }
+
+  /* ============ FEATURES (Yara's "Unlock operational efficiency") ============ */
+  .features {
+    padding: 160px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .features-lights {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 400px;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .features-lights .light-beam {
+    top: 132px;
+  }
+  .features-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .features-headline {
+    margin-bottom: 64px;
+    text-align: right;
+  }
+  .features-headline h2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 16px;
+  }
+  .features-headline p {
+    font-size: 17px;
+    color: var(--ink-dim);
+    max-width: 460px;
+    margin-left: auto;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    position: relative;
+  }
+  /* Vertical divider lines */
+  .features-grid::before,
+  .features-grid::after {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 80%;
+    top: 10%;
+    background: linear-gradient(180deg, rgba(59, 59, 59, 0.2) 0%, #3b3b3b 50%, rgba(59, 59, 59, 0.2) 100%);
+  }
+  .features-grid::before { left: 0; }
+  .features-grid::after { right: 0; }
+
+  .feature-card {
+    padding: 32px;
+    border: 1px solid rgba(59, 59, 59, 0.6);
+    border-radius: 8px;
+    background: linear-gradient(212deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.04) 60%, rgba(91, 63, 196, 0.15) 108%);
+    transition: all 0.3s;
+  }
+  .feature-card:hover {
+    border-color: var(--purple);
+    transform: translateY(-2px);
+  }
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(91, 63, 196, 0.15);
+    border: 1px solid var(--purple);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--purple-bright);
+    margin-bottom: 24px;
+  }
+  .feature-card h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+  .feature-card p {
+    font-size: 14px;
+    color: var(--ink-dim);
+    line-height: 1.55;
+  }
+  @media (max-width: 900px) {
+    .features { padding: 96px 20px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .features-headline { text-align: left; }
+    .features-headline p { margin-left: 0; }
+  }
+
+  /* ============ FINAL CTA ============ */
+  .cta-final {
+    padding: 160px 32px;
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .cta-final::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(139, 110, 230, 0.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 100%, rgba(91, 63, 196, 0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .cta-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .cta-headline h2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: clamp(40px, 6vw, 80px);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 24px;
+  }
+  .cta-headline h2 .serif {
+    color: var(--purple-bright);
+    font-weight: 400;
+  }
+  .cta-sub {
+    font-size: 17px;
+    color: var(--ink-dim);
+    margin-bottom: 40px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cta-headline .btn-primary {
+    margin: 0 auto;
+  }
+
+  @media (max-width: 900px) {
+    .cta-final { padding: 100px 20px; }
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    padding: 80px 32px 48px;
+    border-top: 1px solid var(--line);
+  }
+  .footer-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .footer-left { display: flex; flex-direction: column; gap: 8px; }
+  .footer-left .nav-logo { font-size: 22px; }
+  .footer-left .tagline { font-size: 13px; color: var(--ink-faint); }
+  .footer-right { font-size: 13px; color: var(--ink-faint); }
+  .footer-right a { color: var(--ink-dim); transition: color 0.2s; }
+  .footer-right a:hover { color: var(--purple-bright); }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  ::selection { background: var(--purple); color: white; }
+
+  /* ============ MODAL ============ */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow-y: auto;
+  }
+  .modal-backdrop.open { opacity: 1; pointer-events: auto; }
+
+  .modal {
+    background: linear-gradient(180deg, #0d0d12 0%, #050507 100%);
+    border: 1px solid var(--line-strong);
+    border-radius: 20px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 520px;
+    position: relative;
+    transform: translateY(20px) scale(0.98);
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(139, 110, 230, 0.1);
+  }
+  .modal-backdrop.open .modal { transform: translateY(0) scale(1); }
+
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink-dim);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+  }
+  .modal-close:hover {
+    background: rgba(255,255,255,0.05);
+    color: white;
+    transform: rotate(90deg);
+  }
+
+  .modal-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+  .modal-title em.serif { font-style: normal; font-family: 'Inter', sans-serif; color: var(--purple-bright); font-weight: 500; }
+  .modal-sub { font-size: 14px; color: var(--ink-dim); margin-bottom: 28px; }
+
+  .form-field { margin-bottom: 16px; }
+  .form-field label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 8px;
+  }
+  .form-field input, .form-field textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: white;
+    font-family: inherit;
+    font-size: 14px;
+    transition: all 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .form-field input::placeholder, .form-field textarea::placeholder { color: var(--ink-faint); }
+  .form-field input:focus, .form-field textarea:focus {
+    outline: none;
+    border-color: var(--purple-bright);
+    background: rgba(139, 110, 230, 0.05);
+  }
+  .form-field textarea { resize: vertical; min-height: 80px; }
+  .form-field .optional { color: var(--ink-faint); text-transform: none; letter-spacing: 0.02em; font-size: 10px; margin-left: 4px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .modal-submit {
+    width: 100%;
+    padding: 14px;
+    background: white;
+    color: var(--bg);
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 8px;
+    transition: all 0.3s;
+  }
+  .modal-submit:hover:not(:disabled) {
+    background: var(--purple-bright);
+    color: white;
+    transform: translateY(-1px);
+  }
+  .modal-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+  .modal-foot { font-size: 11px; color: var(--ink-faint); text-align: center; margin-top: 16px; }
+
+  .modal-success { display: none; text-align: center; padding: 16px 0; }
+  .modal.success .modal-form, .modal.success .modal-title, .modal.success .modal-sub { display: none; }
+  .modal.success .modal-success { display: block; }
+  .success-mark {
+    width: 56px; height: 56px;
+    margin: 16px auto 24px;
+    border-radius: 50%;
+    background: rgba(139, 110, 230, 0.15);
+    color: var(--purple-bright);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: success-in 0.5s ease-out;
+  }
+  @keyframes success-in {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .success-title { font-family: 'Inter', sans-serif; font-size: 28px; margin-bottom: 12px; }
+  .success-text { color: var(--ink-dim); font-size: 14px; max-width: 360px; margin: 0 auto 24px; }
+
+  body.modal-open { overflow: hidden; }
+
+  @media (max-width: 600px) {
+    .modal { padding: 40px 24px 28px; }
+    .modal-title { font-size: 26px; }
+    .form-row { grid-template-columns: 1fr; gap: 0; }
+  }
+
+  /* ============================================================
+     AI ASSISTANT; FLOATING HEAD + CHAT PANEL
+     The stickman body is gone. Only the head remains as a premium
+     floating launcher that opens a glassmorphism consultant panel.
+     ============================================================ */
+
+  /* ---- Floating launcher (the head) ---- */
+  #nai-launcher {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 64px;
+    height: 64px;
+    z-index: 900;            /* below modal (1000) */
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+    opacity: 0;
+    animation: nai-launcher-in 0.8s ease 1.2s forwards;
+    will-change: transform, opacity;
+    -webkit-tap-highlight-color: transparent;
+  }
+  @keyframes nai-launcher-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  body.modal-open #nai-launcher,
+  body.nai-open #nai-launcher {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.35s ease;
+  }
+
+  /* breathing float on the whole launcher */
+  .nai-float {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    animation: nai-float 6s ease-in-out infinite;
+    will-change: transform;
+  }
+  @keyframes nai-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+
+  /* ambient halo */
+  .nai-halo {
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139,110,230,0.4) 0%, transparent 65%);
+    filter: blur(10px);
+    animation: nai-halo 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes nai-halo {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50%      { opacity: 1;    transform: scale(1.12); }
+  }
+
+  /* the head disc */
+  .nai-head {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 38% 32%, rgba(255,255,255,0.12) 0%, transparent 55%),
+      linear-gradient(160deg, #18141f 0%, #0a0810 100%);
+    border: 1px solid rgba(139,110,230,0.4);
+    box-shadow:
+      0 10px 30px -8px rgba(0,0,0,0.7),
+      inset 0 0 18px rgba(139,110,230,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.4s cubic-bezier(0.2,0.8,0.2,1), border-color 0.3s;
+  }
+  #nai-launcher:hover .nai-head {
+    transform: scale(1.06);
+    border-color: rgba(139,110,230,0.8);
+  }
+  #nai-launcher:active .nai-head { transform: scale(0.97); }
+
+  /* the face svg */
+  .nai-face { width: 40px; height: 40px; overflow: visible; }
+  .nai-eye {
+    fill: #fff;
+    filter: drop-shadow(0 0 3px rgba(139,110,230,0.9));
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  .nai-eye.blink { animation: nai-blink 0.16s ease; }
+  @keyframes nai-blink {
+    0%, 100% { transform: scaleY(1); }
+    50%      { transform: scaleY(0.1); }
+  }
+
+  /* pulse ring emitted occasionally */
+  .nai-pulse {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(139,110,230,0.6);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .nai-pulse.go { animation: nai-pulse 1.6s ease-out; }
+  @keyframes nai-pulse {
+    0%   { opacity: 0.6; transform: scale(0.7); }
+    100% { opacity: 0;   transform: scale(1.9); }
+  }
+
+  /* tiny prompt that nudges first-time users */
+  .nai-tip {
+    position: absolute;
+    bottom: 50%;
+    right: calc(100% + 12px);
+    transform: translateY(50%);
+    white-space: nowrap;
+    background: rgba(15,15,18,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(139,110,230,0.3);
+    border-radius: 12px 12px 12px 4px;
+    padding: 9px 13px;
+    font-size: 12.5px;
+    color: #fff;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .nai-tip.show { opacity: 1; }
+
+  /* ---- Chat panel ---- */
+  #nai-panel {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 400px;
+    max-width: calc(100vw - 40px);
+    height: 600px;
+    max-height: calc(100vh - 56px);
+    z-index: 950;
+    display: flex;
+    flex-direction: column;
+    border-radius: 24px;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(20,18,28,0.86) 0%, rgba(8,7,12,0.92) 100%);
+    backdrop-filter: blur(28px) saturate(140%);
+    -webkit-backdrop-filter: blur(28px) saturate(140%);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow:
+      0 40px 100px -20px rgba(0,0,0,0.75),
+      0 0 0 1px rgba(139,110,230,0.08),
+      inset 0 1px 0 rgba(255,255,255,0.06);
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+    transform-origin: bottom right;
+    pointer-events: none;
+    transition:
+      opacity 0.45s cubic-bezier(0.2,0.8,0.2,1),
+      transform 0.45s cubic-bezier(0.2,0.8,0.2,1);
+  }
+  body.nai-open #nai-panel {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  /* panel header */
+  .nai-phead {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    background: linear-gradient(180deg, rgba(139,110,230,0.06) 0%, transparent 100%);
+  }
+  .nai-pavatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 38% 32%, rgba(255,255,255,0.14) 0%, transparent 55%),
+      linear-gradient(160deg, #18141f 0%, #0a0810 100%);
+    border: 1px solid rgba(139,110,230,0.4);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .nai-pavatar svg { width: 22px; height: 22px; overflow: visible; }
+  .nai-ptitle { flex: 1; min-width: 0; }
+  .nai-ptitle h4 {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .nai-status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 8px rgba(74,222,128,0.7);
+    animation: nai-halo 2.4s ease-in-out infinite;
+  }
+  .nai-ptitle p {
+    font-size: 11px;
+    color: var(--ink-dim);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+  }
+  .nai-pclose {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink-dim);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+    flex-shrink: 0;
+  }
+  .nai-pclose:hover {
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+    transform: rotate(90deg);
+  }
+
+  /* messages area */
+  .nai-msgs {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.15) transparent;
+  }
+  .nai-msgs::-webkit-scrollbar { width: 6px; }
+  .nai-msgs::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.15); border-radius: 3px;
+  }
+
+  .nai-msg {
+    max-width: 86%;
+    padding: 12px 15px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    border-radius: 16px;
+    animation: nai-msg-in 0.45s cubic-bezier(0.2,0.8,0.2,1);
+  }
+  @keyframes nai-msg-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .nai-msg.bot {
+    align-self: flex-start;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-bottom-left-radius: 5px;
+    color: rgba(255,255,255,0.92);
+  }
+  .nai-msg.user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, rgba(139,110,230,0.28), rgba(91,63,196,0.22));
+    border: 1px solid rgba(139,110,230,0.35);
+    border-bottom-right-radius: 5px;
+    color: #fff;
+  }
+  .nai-msg strong { font-weight: 600; color: #fff; }
+
+  /* CTA inside a bot message (fallback) */
+  .nai-msg-cta {
+    margin-top: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #fff;
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .nai-msg-cta:hover {
+    background: var(--purple-bright);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  /* typing indicator */
+  .nai-typing {
+    align-self: flex-start;
+    display: flex;
+    gap: 4px;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    border-bottom-left-radius: 5px;
+  }
+  .nai-typing span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--purple-bright);
+    animation: nai-typing 1.2s ease-in-out infinite;
+  }
+  .nai-typing span:nth-child(2) { animation-delay: 0.18s; }
+  .nai-typing span:nth-child(3) { animation-delay: 0.36s; }
+  @keyframes nai-typing {
+    0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+    30%           { opacity: 1;   transform: translateY(-4px); }
+  }
+
+  /* suggested questions */
+  .nai-suggest {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 20px 22px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    margin-top: 4px;
+    padding-top: 18px;
+  }
+  .nai-chip {
+    padding: 8px 13px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 100px;
+    font-family: inherit;
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    cursor: pointer;
+    transition: all 0.25s;
+    white-space: nowrap;
+  }
+  .nai-chip:hover {
+    background: rgba(139,110,230,0.14);
+    border-color: rgba(139,110,230,0.5);
+    color: #fff;
+  }
+
+  /* input row */
+  .nai-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px 20px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+  .nai-input {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 13.5px;
+    transition: all 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .nai-input::placeholder { color: var(--ink-faint); }
+  .nai-input:focus {
+    outline: none;
+    border-color: var(--purple-bright);
+    background: rgba(139,110,230,0.06);
+  }
+  .nai-send {
+    width: 44px; height: 44px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    border: none;
+    background: #fff;
+    color: #000;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+  }
+  .nai-send:hover { background: var(--purple-bright); color: #fff; transform: translateY(-1px); }
+  .nai-send:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* responsive: panel becomes near-fullscreen on phones */
+  @media (max-width: 600px) {
+    #nai-launcher { width: 56px; height: 56px; bottom: 20px; right: 20px; }
+    .nai-face { width: 34px; height: 34px; }
+    #nai-panel {
+      width: calc(100vw - 24px);
+      height: calc(100vh - 100px);
+      bottom: 12px;
+      right: 12px;
+    }
+    .nai-tip { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nai-float, .nai-halo, .nai-status-dot { animation: none !important; }
+  }
+
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="logo-mark" viewBox="0 0 22 18">
+      <path d="M1 14 Q11 2 21 14" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <circle cx="11" cy="16" r="1.1" fill="currentColor"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <svg><use href="#logo-mark"/></svg>
+    Nakera
+  </a>
+  <ul class="nav-links">
+    <li><a href="#capabilities">Capabilities</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#industries">Industries</a></li>
+    <li><a href="#founders">Team</a></li>
+    <li><a href="#features">Why us</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Contact Us</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" data-ai-section="hero" data-ai-message="Welcome to Nakera 👋">
+  <div class="hero-lights">
+    <div class="light-beam beam-1"></div>
+    <div class="light-beam beam-2"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="pill">New</span>
+      Deploying across MENA &amp; Africa
+    </div>
+    <h1 class="hero-headline">
+      <strong>Enterprise-grade</strong><br/>
+      <span class="line-2"><em class="serif">AI Agents</em> for modern operations</span>
+    </h1>
+    <div class="headline-beam"></div>
+  </div>
+</section>
+
+<!-- SUB-HERO -->
+<section class="sub-hero" data-ai-section="intro">
+  <div class="sub-hero-inner">
+    <p class="sub-hero-text">
+      Nakera AI empowers companies to streamline operations with intelligent, agent-based automation; from <em class="serif">customer support and sales</em> to back-office workflows and decisions.
+    </p>
+    <div class="sub-hero-ctas">
+      <a href="#cta" class="btn-primary cta-trigger">
+        Get in touch
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12m0 0L7 1m6 6l-6 6" stroke="currentColor" stroke-width="1.5"/></svg>
+      </a>
+      <a href="#capabilities" class="btn-secondary">
+        Learn more
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12m0 0L1 7m6 6l6-6" stroke="currentColor" stroke-width="1.5"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION HEADLINE -->
+<div class="section-headline" id="capabilities">
+  <h2>Coordinate multi-agent workflows<br/>with <span class="serif">advanced orchestration</span>.</h2>
+</div>
+
+<!-- STICKY SCROLL; Capabilities -->
+<section class="sticky-scroll" data-ai-section="capabilities" data-ai-message="Our agents at work">
+  <div class="scroll-text-col">
+    <div class="scroll-item active" data-step="0">
+      <h3>Built for business operations</h3>
+      <p>Deploy intelligent agents across customer support, sales, scheduling, and admin workflows; fully automated and precisely coordinated.</p>
+    </div>
+    <div class="scroll-item" data-step="1">
+      <h3>Real-time outcomes</h3>
+      <p>Reduce bottlenecks and delays by letting autonomous agents handle repetitive tasks. Results are instant, measurable, and scalable across departments.</p>
+    </div>
+    <div class="scroll-item" data-step="2">
+      <h3>Human-centered by design</h3>
+      <p>Nakera blends intelligent automation with a clean, intuitive interface that puts your team in control; no learning curve required.</p>
+    </div>
+  </div>
+
+  <div class="scroll-images-col">
+    <!-- Mockup 1: Agent conversation -->
+    <div class="scroll-image-group">
+      <div class="mock">
+        <div class="mock-head">
+          <div class="mock-title">
+            <div class="mock-avatar">L</div>
+            Sales Agent · Layla
+          </div>
+          <span class="mock-badge">Live</span>
+        </div>
+        <div class="mock-msg user">Hi, looking at the 2-bed in Marina Heights. Available next month?</div>
+        <div class="mock-msg bot">Hi Adnan, yes, Unit 1402 is available from May 15. AED 11,500/mo, 2BR + study. Want me to book a viewing this week?</div>
+        <div class="mock-msg user">Thursday afternoon if possible.</div>
+        <div class="mock-msg bot">Booked Thursday 4PM with Sara. Calendar invite + location pin sent.</div>
+        <div class="mock-action">Action · Calendar invite sent · CRM updated · Lead scored 87</div>
+      </div>
+    </div>
+
+    <!-- Mockup 2: Stats dashboard -->
+    <div class="scroll-image-group">
+      <div class="mock">
+        <div class="mock-head">
+          <div class="mock-title">
+            <div class="mock-avatar">R</div>
+            Support · 7 day overview
+          </div>
+          <span class="mock-badge">Live</span>
+        </div>
+        <div class="mock-stats">
+          <div class="mock-stat">
+            <div class="val">247</div>
+            <div class="lbl">Tickets</div>
+          </div>
+          <div class="mock-stat">
+            <div class="val">82%</div>
+            <div class="lbl">Resolved</div>
+          </div>
+          <div class="mock-stat">
+            <div class="val">0.9s</div>
+            <div class="lbl">Avg reply</div>
+          </div>
+        </div>
+        <div style="margin-top: 16px;">
+          <div class="mock-msg bot" style="max-width: 100%;">"Resolution times dropped from 9 hours to 4 minutes. CSAT went up."</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-faint); letter-spacing: 0.05em; margin-top: 8px;"> COO · Operations</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mockup 3: Integrations -->
+    <div class="scroll-image-group">
+      <div class="mock">
+        <div class="mock-head">
+          <div class="mock-title">
+            <div class="mock-avatar">·</div>
+            Connected stack
+          </div>
+          <span class="mock-badge">8 integrations</span>
+        </div>
+        <div class="mock-integrations">
+          <div class="mock-int">Salesforce</div>
+          <div class="mock-int">HubSpot</div>
+          <div class="mock-int">Zendesk</div>
+          <div class="mock-int">Slack</div>
+          <div class="mock-int">Gmail</div>
+          <div class="mock-int">WhatsApp</div>
+          <div class="mock-int">Stripe</div>
+          <div class="mock-int">+ 40</div>
+        </div>
+        <div class="mock-action" style="margin-top: 14px;">Status · All systems operational</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     PROCESS / HOW WE WORK - Interactive slides
+     ════════════════════════════════════════════════════════════ -->
+<style>
+  .process-section {
+    position: relative;
+    padding: 140px 6vw 140px;
+    background: linear-gradient(180deg, #0a0810 0%, #0d0a18 50%, #0a0810 100%);
+    overflow: hidden;
+  }
+  .process-section::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(139,110,230,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .process-section::after {
+    content: '';
+    position: absolute;
+    bottom: 10%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(139,110,230,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .process-inner {
+    position: relative;
+    max-width: 1280px;
+    margin: 0 auto;
+    z-index: 1;
+  }
+  .process-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px;
+    border: 1px solid rgba(139,110,230,0.3);
+    border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--purple-bright);
+    margin-bottom: 24px;
+  }
+  .process-eyebrow::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--purple-bright);
+    box-shadow: 0 0 8px var(--purple-bright);
+  }
+  .process-title {
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin: 0 0 18px;
+    font-weight: 500;
+  }
+  .process-title .accent { color: var(--purple-bright); font-weight: 500; }
+  .process-subtitle {
+    font-size: 17px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.55);
+    max-width: 600px;
+    margin: 0 0 70px;
+  }
+  .process-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .process-tabs::-webkit-scrollbar { display: none; }
+  .process-tab {
+    flex: 1;
+    min-width: 140px;
+    background: none;
+    border: none;
+    padding: 18px 16px;
+    text-align: left;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s;
+    font-family: inherit;
+    color: rgba(255,255,255,0.4);
+  }
+  .process-tab .tab-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    opacity: 0.6;
+    margin-bottom: 4px;
+    display: block;
+  }
+  .process-tab .tab-name {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .process-tab:hover { color: rgba(255,255,255,0.7); }
+  .process-tab.active { color: #fff; }
+  .process-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--purple-bright);
+    box-shadow: 0 0 12px var(--purple-bright);
+  }
+  .process-slide-viewport {
+    position: relative;
+    min-height: 460px;
+  }
+  .process-slide {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 60px;
+    align-items: center;
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+    transition: opacity 0.5s cubic-bezier(0.2,0.8,0.2,1), transform 0.5s cubic-bezier(0.2,0.8,0.2,1);
+  }
+  .process-slide.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  .slide-content { max-width: 520px; }
+  .slide-step-label {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--purple-bright);
+    margin-bottom: 18px;
+    padding: 4px 12px;
+    background: rgba(139,110,230,0.12);
+    border-radius: 4px;
+    border: 1px solid rgba(139,110,230,0.25);
+  }
+  .slide-heading {
+    font-size: clamp(28px, 3.5vw, 40px);
+    line-height: 1.1;
+    color: #fff;
+    margin: 0 0 18px;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+  }
+  .slide-description {
+    font-size: 16px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.65);
+    margin: 0 0 26px;
+  }
+  .slide-bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px;
+  }
+  .slide-bullets li {
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: rgba(255,255,255,0.55);
+  }
+  .slide-bullets li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 8px;
+    height: 8px;
+    border: 1.5px solid var(--purple-bright);
+    border-radius: 50%;
+    background: rgba(139,110,230,0.15);
+  }
+  .slide-duration {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.5);
+    padding: 6px 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 100px;
+  }
+  .slide-duration::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+  }
+  .slide-visual {
+    position: relative;
+    aspect-ratio: 1;
+    max-width: 420px;
+    margin-left: auto;
+    border-radius: 24px;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(139,110,230,0.15) 0%, transparent 50%),
+      linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(20px);
+  }
+  .slide-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 0%, transparent 60%, rgba(139,110,230,0.1) 100%);
+    pointer-events: none;
+  }
+  .slide-illustration {
+    width: 70%;
+    height: 70%;
+    position: relative;
+    z-index: 1;
+  }
+  @keyframes proc-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  @keyframes proc-rotate { 0% { transform: rotate(0); } 100% { transform: rotate(360deg); } }
+  @keyframes proc-pulse { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
+  @keyframes proc-dash { to { stroke-dashoffset: 0; } }
+  @keyframes proc-fade-in { to { opacity: 1; } }
+  .process-slide.active .anim-float { animation: proc-float 3s ease-in-out infinite; }
+  .process-slide.active .anim-rotate { animation: proc-rotate 18s linear infinite; transform-origin: center; transform-box: fill-box; }
+  .process-slide.active .anim-pulse { animation: proc-pulse 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+  .process-slide.active .anim-dash { stroke-dasharray: 200; stroke-dashoffset: 200; animation: proc-dash 1.6s ease-out forwards 0.3s; }
+  .process-slide.active .anim-dash-2 { stroke-dasharray: 300; stroke-dashoffset: 300; animation: proc-dash 1.8s ease-out forwards 0.5s; }
+  .process-slide.active .anim-fade-1 { opacity: 0; animation: proc-fade-in 0.6s ease forwards 0.4s; }
+  .process-slide.active .anim-fade-2 { opacity: 0; animation: proc-fade-in 0.6s ease forwards 0.6s; }
+  .process-slide.active .anim-fade-3 { opacity: 0; animation: proc-fade-in 0.6s ease forwards 0.8s; }
+  .process-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .process-nav-progress {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+  }
+  .process-nav-bar {
+    flex: 1;
+    max-width: 200px;
+    height: 2px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .process-nav-bar-fill {
+    height: 100%;
+    background: var(--purple-bright);
+    box-shadow: 0 0 8px var(--purple-bright);
+    transition: width 0.5s cubic-bezier(0.2,0.8,0.2,1);
+    border-radius: 2px;
+  }
+  .process-nav-buttons { display: flex; gap: 10px; }
+  .process-nav-btn {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.02);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .process-nav-btn:hover:not(:disabled) {
+    border-color: var(--purple-bright);
+    background: rgba(139,110,230,0.1);
+    transform: scale(1.05);
+  }
+  .process-nav-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+  .process-nav-btn svg { width: 16px; height: 16px; }
+  @media (max-width: 860px) {
+    .process-section { padding: 90px 5vw; }
+    .process-slide { grid-template-columns: 1fr; gap: 30px; }
+    .process-slide-viewport { min-height: 700px; }
+    .slide-visual { max-width: 280px; margin: 0 auto; order: -1; }
+    .process-tab { min-width: 100px; padding: 14px 10px; }
+    .process-tab .tab-name { font-size: 12px; }
+  }
+</style>
+
+<section class="process-section" id="process" data-ai-section="process" data-ai-message="How we work with you">
+  <div class="process-inner">
+    <span class="process-eyebrow">Our process</span>
+    <h2 class="process-title">From conversation to <span class="accent">deployed agents</span>,<br/>in five focused steps.</h2>
+    <p class="process-subtitle">Every Nakera engagement follows the same structure. No improvisation, no scope creep, no surprises. Clarity at every stage so you know where you stand and what comes next.</p>
+
+    <div class="process-tabs" role="tablist">
+      <button class="process-tab active" role="tab" data-step="0">
+        <span class="tab-num">01</span>
+        <span class="tab-name">Discovery</span>
+      </button>
+      <button class="process-tab" role="tab" data-step="1">
+        <span class="tab-num">02</span>
+        <span class="tab-name">Strategic Audit</span>
+      </button>
+      <button class="process-tab" role="tab" data-step="2">
+        <span class="tab-num">03</span>
+        <span class="tab-name">Design &amp; Build</span>
+      </button>
+      <button class="process-tab" role="tab" data-step="3">
+        <span class="tab-num">04</span>
+        <span class="tab-name">Deploy &amp; Train</span>
+      </button>
+      <button class="process-tab" role="tab" data-step="4">
+        <span class="tab-num">05</span>
+        <span class="tab-name">Optimize</span>
+      </button>
+    </div>
+
+    <div class="process-slide-viewport">
+
+      <div class="process-slide active" data-step="0">
+        <div class="slide-content">
+          <span class="slide-step-label">STEP 01</span>
+          <h3 class="slide-heading">A 30-minute conversation, not a sales pitch.</h3>
+          <p class="slide-description">We start by understanding your operations: where time goes, where mistakes happen, and which workflows are eating your team alive. No deck, no pressure, just questions.</p>
+          <ul class="slide-bullets">
+            <li>Map your current operational pain points</li>
+            <li>Identify which tasks are AI candidates</li>
+            <li>Honest read on whether Nakera is the right fit</li>
+          </ul>
+          <span class="slide-duration">Duration: 30 minutes</span>
+        </div>
+        <div class="slide-visual">
+          <svg class="slide-illustration" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <g class="anim-float">
+              <rect x="20" y="60" width="90" height="55" rx="14" fill="rgba(139,110,230,0.08)" stroke="rgba(139,110,230,0.4)" stroke-width="1.5"/>
+              <circle cx="40" cy="87" r="3" fill="#8b6ee6" class="anim-pulse"/>
+              <circle cx="55" cy="87" r="3" fill="#8b6ee6" class="anim-pulse" style="animation-delay:0.3s"/>
+              <circle cx="70" cy="87" r="3" fill="#8b6ee6" class="anim-pulse" style="animation-delay:0.6s"/>
+              <path d="M30 115 L26 125 L42 115" fill="rgba(139,110,230,0.08)" stroke="rgba(139,110,230,0.4)" stroke-width="1.5"/>
+            </g>
+            <g class="anim-float" style="animation-delay:1s">
+              <rect x="90" y="100" width="90" height="55" rx="14" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+              <line x1="105" y1="118" x2="165" y2="118" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" class="anim-dash"/>
+              <line x1="105" y1="128" x2="150" y2="128" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round" class="anim-dash-2"/>
+              <line x1="105" y1="138" x2="158" y2="138" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round" class="anim-dash"/>
+              <path d="M170 155 L174 165 L158 155" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+            </g>
+            <g class="anim-fade-1">
+              <circle cx="100" cy="35" r="14" fill="rgba(139,110,230,0.2)" stroke="#8b6ee6" stroke-width="1.5"/>
+              <text x="100" y="40" text-anchor="middle" fill="#fff" font-size="16" font-family="Inter, sans-serif" font-weight="500">?</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="process-slide" data-step="1">
+        <div class="slide-content">
+          <span class="slide-step-label">STEP 02</span>
+          <h3 class="slide-heading">We map your operations. You walk away with a blueprint.</h3>
+          <p class="slide-description">We cartograph your workflows, score every use case by impact and feasibility, and deliver a detailed strategic blueprint. You keep this document either way, whether we build together or not.</p>
+          <ul class="slide-bullets">
+            <li>Process cartography across your stack</li>
+            <li>Use case scoring: impact times feasibility</li>
+            <li>Implementation roadmap with timelines</li>
+          </ul>
+          <span class="slide-duration">Duration: 1 to 2 weeks</span>
+        </div>
+        <div class="slide-visual">
+          <svg class="slide-illustration" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <g opacity="0.15">
+              <line x1="40" y1="40" x2="160" y2="40" stroke="#fff" stroke-width="1"/>
+              <line x1="40" y1="80" x2="160" y2="80" stroke="#fff" stroke-width="1"/>
+              <line x1="40" y1="120" x2="160" y2="120" stroke="#fff" stroke-width="1"/>
+              <line x1="40" y1="160" x2="160" y2="160" stroke="#fff" stroke-width="1"/>
+              <line x1="40" y1="40" x2="40" y2="160" stroke="#fff" stroke-width="1"/>
+              <line x1="80" y1="40" x2="80" y2="160" stroke="#fff" stroke-width="1"/>
+              <line x1="120" y1="40" x2="120" y2="160" stroke="#fff" stroke-width="1"/>
+              <line x1="160" y1="40" x2="160" y2="160" stroke="#fff" stroke-width="1"/>
+            </g>
+            <circle cx="60" cy="130" r="6" fill="rgba(139,110,230,0.3)" stroke="#8b6ee6" stroke-width="1.5" class="anim-fade-1"/>
+            <circle cx="90" cy="100" r="9" fill="rgba(139,110,230,0.5)" stroke="#8b6ee6" stroke-width="1.5" class="anim-fade-2 anim-pulse"/>
+            <circle cx="125" cy="65" r="12" fill="rgba(139,110,230,0.7)" stroke="#8b6ee6" stroke-width="2" class="anim-fade-3"/>
+            <circle cx="75" cy="145" r="5" fill="rgba(139,110,230,0.2)" stroke="#8b6ee6" stroke-width="1" class="anim-fade-1"/>
+            <circle cx="110" cy="85" r="7" fill="rgba(139,110,230,0.4)" stroke="#8b6ee6" stroke-width="1.5" class="anim-fade-2"/>
+            <path d="M55 145 Q90 100 130 60" stroke="#8b6ee6" stroke-width="1.5" stroke-dasharray="3 3" class="anim-dash-2"/>
+            <text x="30" y="44" fill="rgba(255,255,255,0.5)" font-size="8" font-family="JetBrains Mono, monospace">High</text>
+            <text x="30" y="164" fill="rgba(255,255,255,0.5)" font-size="8" font-family="JetBrains Mono, monospace">Low</text>
+            <text x="38" y="178" fill="rgba(255,255,255,0.5)" font-size="8" font-family="JetBrains Mono, monospace">Easy</text>
+            <text x="142" y="178" fill="rgba(255,255,255,0.5)" font-size="8" font-family="JetBrains Mono, monospace">Hard</text>
+            <text x="100" y="30" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.05em">IMPACT VS FEASIBILITY</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="process-slide" data-step="2">
+        <div class="slide-content">
+          <span class="slide-step-label">STEP 03</span>
+          <h3 class="slide-heading">Custom agents built into your existing stack.</h3>
+          <p class="slide-description">Weekly sprints with regular demos. You see the work as it happens, not just at the end. Every agent is designed around your actual workflows, not generic SaaS templates.</p>
+          <ul class="slide-bullets">
+            <li>Weekly sprint cycles with live demos</li>
+            <li>Native integration with your existing tools</li>
+            <li>Built-in safeguards and human-in-the-loop checkpoints</li>
+          </ul>
+          <span class="slide-duration">Duration: 2 to 6 weeks per agent</span>
+        </div>
+        <div class="slide-visual">
+          <svg class="slide-illustration" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <g class="anim-float">
+              <rect x="60" y="125" width="80" height="22" rx="4" fill="rgba(139,110,230,0.15)" stroke="#8b6ee6" stroke-width="1.5" class="anim-fade-1"/>
+              <line x1="68" y1="136" x2="92" y2="136" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="130" cy="136" r="3" fill="#8b6ee6"/>
+            </g>
+            <g class="anim-float" style="animation-delay:0.4s">
+              <rect x="50" y="95" width="100" height="22" rx="4" fill="rgba(139,110,230,0.2)" stroke="#8b6ee6" stroke-width="1.5" class="anim-fade-2"/>
+              <line x1="58" y1="106" x2="100" y2="106" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="138" cy="106" r="3" fill="#8b6ee6"/>
+            </g>
+            <g class="anim-float" style="animation-delay:0.8s">
+              <rect x="40" y="65" width="120" height="22" rx="4" fill="rgba(139,110,230,0.3)" stroke="#8b6ee6" stroke-width="2" class="anim-fade-3"/>
+              <line x1="48" y1="76" x2="100" y2="76" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="148" cy="76" r="3" fill="#fff"/>
+              <circle cx="148" cy="76" r="6" fill="none" stroke="#8b6ee6" stroke-width="1" class="anim-pulse"/>
+            </g>
+            <line x1="30" y1="155" x2="170" y2="155" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="2 4"/>
+            <text x="100" y="40" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.05em">SPRINT BUILD</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="process-slide" data-step="3">
+        <div class="slide-content">
+          <span class="slide-step-label">STEP 04</span>
+          <h3 class="slide-heading">Production deployment, full team enablement.</h3>
+          <p class="slide-description">We deploy to production, integrate with your live systems, and train your team on how to work alongside the agents. We stay on-site or in remote sync until everything runs smoothly.</p>
+          <ul class="slide-bullets">
+            <li>Production deployment with safe rollout</li>
+            <li>Team training and documentation</li>
+            <li>Monitoring dashboards from day one</li>
+          </ul>
+          <span class="slide-duration">Duration: 1 week</span>
+        </div>
+        <div class="slide-visual">
+          <svg class="slide-illustration" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <g class="anim-float">
+              <path d="M100 40 Q115 55 115 90 L115 125 L85 125 L85 90 Q85 55 100 40 Z" fill="rgba(139,110,230,0.2)" stroke="#8b6ee6" stroke-width="1.5"/>
+              <circle cx="100" cy="78" r="9" fill="rgba(139,110,230,0.4)" stroke="#8b6ee6" stroke-width="1.5"/>
+              <circle cx="100" cy="78" r="4" fill="rgba(255,255,255,0.6)"/>
+              <path d="M85 110 L70 130 L85 125 Z" fill="rgba(139,110,230,0.3)" stroke="#8b6ee6" stroke-width="1.5"/>
+              <path d="M115 110 L130 130 L115 125 Z" fill="rgba(139,110,230,0.3)" stroke="#8b6ee6" stroke-width="1.5"/>
+              <line x1="100" y1="50" x2="100" y2="60" stroke="#8b6ee6" stroke-width="1.5"/>
+            </g>
+            <g>
+              <path d="M92 130 L88 165" stroke="#8b6ee6" stroke-width="2.5" stroke-linecap="round" class="anim-pulse"/>
+              <path d="M100 130 L100 175" stroke="#fff" stroke-width="2.5" stroke-linecap="round" class="anim-pulse" style="animation-delay:0.2s"/>
+              <path d="M108 130 L112 165" stroke="#8b6ee6" stroke-width="2.5" stroke-linecap="round" class="anim-pulse" style="animation-delay:0.4s"/>
+            </g>
+            <circle cx="40" cy="70" r="1.5" fill="#fff" opacity="0.6" class="anim-pulse"/>
+            <circle cx="160" cy="60" r="1.5" fill="#fff" opacity="0.6" class="anim-pulse" style="animation-delay:0.5s"/>
+            <circle cx="50" cy="120" r="1" fill="#8b6ee6" opacity="0.7" class="anim-pulse" style="animation-delay:1s"/>
+            <circle cx="155" cy="110" r="1" fill="#8b6ee6" opacity="0.7" class="anim-pulse" style="animation-delay:1.5s"/>
+            <text x="100" y="25" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.05em">GO LIVE</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="process-slide" data-step="4">
+        <div class="slide-content">
+          <span class="slide-step-label">STEP 05</span>
+          <h3 class="slide-heading">Your agents get smarter with every interaction.</h3>
+          <p class="slide-description">We monitor performance, gather your team's feedback, and continuously improve the agents. This isn't a one-shot deployment. It's a partnership that compounds over time.</p>
+          <ul class="slide-bullets">
+            <li>Performance monitoring and analytics</li>
+            <li>Iterative improvements based on real usage</li>
+            <li>Scaling support as your needs grow</li>
+          </ul>
+          <span class="slide-duration">Duration: Ongoing</span>
+        </div>
+        <div class="slide-visual">
+          <svg class="slide-illustration" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <g class="anim-rotate" style="transform-origin:100px 100px">
+              <circle cx="100" cy="100" r="60" stroke="rgba(139,110,230,0.2)" stroke-width="1.5" stroke-dasharray="4 6" fill="none"/>
+            </g>
+            <circle cx="100" cy="100" r="40" stroke="rgba(139,110,230,0.4)" stroke-width="1.5" fill="none" class="anim-pulse"/>
+            <g class="anim-fade-1">
+              <path d="M100 60 A40 40 0 0 1 134.6 80 L128 84 L138 85 L137 75 Z" fill="#8b6ee6" stroke="#8b6ee6" stroke-width="1"/>
+            </g>
+            <g class="anim-fade-2">
+              <path d="M134.6 120 A40 40 0 0 1 100 140 L97 132 L93 142 L103 142 Z" fill="#8b6ee6" stroke="#8b6ee6" stroke-width="1"/>
+            </g>
+            <g class="anim-fade-3">
+              <path d="M65.4 120 A40 40 0 0 1 65.4 80 L70 86 L62 80 L62 90 Z" fill="#8b6ee6" stroke="#8b6ee6" stroke-width="1"/>
+            </g>
+            <circle cx="100" cy="100" r="14" fill="rgba(139,110,230,0.3)" stroke="#8b6ee6" stroke-width="2" class="anim-pulse"/>
+            <circle cx="100" cy="100" r="5" fill="#fff"/>
+            <text x="100" y="30" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.05em">CONTINUOUS LOOP</text>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="process-nav">
+      <div class="process-nav-progress">
+        <span id="process-step-indicator">01 / 05</span>
+        <div class="process-nav-bar">
+          <div class="process-nav-bar-fill" id="process-nav-bar-fill" style="width: 20%"></div>
+        </div>
+      </div>
+      <div class="process-nav-buttons">
+        <button class="process-nav-btn" id="process-prev" aria-label="Previous step" disabled>
+          <svg viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="process-nav-btn" id="process-next" aria-label="Next step">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function() {
+  const tabs = document.querySelectorAll('.process-tab');
+  const slides = document.querySelectorAll('.process-slide');
+  const prevBtn = document.getElementById('process-prev');
+  const nextBtn = document.getElementById('process-next');
+  const indicator = document.getElementById('process-step-indicator');
+  const barFill = document.getElementById('process-nav-bar-fill');
+  const totalSteps = slides.length;
+  let currentStep = 0;
+
+  function goToStep(step) {
+    if (step < 0 || step >= totalSteps) return;
+    currentStep = step;
+    tabs.forEach((t, i) => t.classList.toggle('active', i === step));
+    slides.forEach((s, i) => s.classList.toggle('active', i === step));
+    const stepNum = String(step + 1).padStart(2, '0');
+    const totalNum = String(totalSteps).padStart(2, '0');
+    if (indicator) indicator.textContent = stepNum + ' / ' + totalNum;
+    if (barFill) barFill.style.width = ((step + 1) / totalSteps * 100) + '%';
+    prevBtn.disabled = step === 0;
+    nextBtn.disabled = step === totalSteps - 1;
+  }
+
+  tabs.forEach((tab, i) => tab.addEventListener('click', () => goToStep(i)));
+  prevBtn.addEventListener('click', () => goToStep(currentStep - 1));
+  nextBtn.addEventListener('click', () => goToStep(currentStep + 1));
+
+  document.addEventListener('keydown', (e) => {
+    const section = document.getElementById('process');
+    if (!section) return;
+    const rect = section.getBoundingClientRect();
+    const inView = rect.top < window.innerHeight * 0.6 && rect.bottom > window.innerHeight * 0.4;
+    if (!inView) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); goToStep(currentStep + 1); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); goToStep(currentStep - 1); }
+  });
+})();
+</script>
+<!-- ════════ END PROCESS SECTION ════════ -->
+
+
+<!-- ════════════════════════════════════════════════════════════
+     INDUSTRIES - Tab switcher + Live operational console
+     ════════════════════════════════════════════════════════════ -->
+<style>
+  .industries-section {
+    position: relative;
+    padding: 140px 6vw;
+    background: linear-gradient(180deg, #0a0810 0%, #0c091a 100%);
+    overflow: hidden;
+  }
+  .industries-section::before {
+    content: '';
+    position: absolute;
+    top: 30%;
+    right: -15%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(139,110,230,0.07) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .industries-inner {
+    position: relative;
+    max-width: 1280px;
+    margin: 0 auto;
+    z-index: 1;
+  }
+  .industries-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px;
+    border: 1px solid rgba(139,110,230,0.3);
+    border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--purple-bright);
+    margin-bottom: 24px;
+  }
+  .industries-eyebrow::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--purple-bright);
+    box-shadow: 0 0 8px var(--purple-bright);
+  }
+  .industries-title {
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin: 0 0 18px;
+    font-weight: 500;
+  }
+  .industries-title .accent { color: var(--purple-bright); }
+  .industries-subtitle {
+    font-size: 17px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.55);
+    max-width: 620px;
+    margin: 0 0 60px;
+  }
+
+  /* Industry switcher pills */
+  .ind-switcher {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 50px;
+    padding: 8px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 100px;
+    width: fit-content;
+    max-width: 100%;
+  }
+  .ind-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 22px;
+    border-radius: 100px;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.5);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.2,0.8,0.2,1);
+    position: relative;
+    white-space: nowrap;
+  }
+  .ind-pill:hover { color: rgba(255,255,255,0.85); }
+  .ind-pill.active {
+    background: linear-gradient(135deg, rgba(139,110,230,0.25) 0%, rgba(139,110,230,0.12) 100%);
+    color: #fff;
+    box-shadow: 0 0 0 1px rgba(139,110,230,0.4), 0 4px 14px rgba(139,110,230,0.2);
+  }
+  .ind-pill-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+
+  /* Two-column layout */
+  .ind-content-wrap {
+    position: relative;
+    min-height: 600px;
+  }
+  .ind-content {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 50px;
+    align-items: stretch;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    transform: translateY(15px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+  }
+  .ind-content.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    position: relative;
+  }
+
+  /* LEFT COLUMN: Today's reality */
+  .ind-pain {
+    padding: 40px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0) 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+    position: relative;
+  }
+  .ind-pain-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 22px;
+    margin-bottom: 26px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .ind-pain-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ff5d4d;
+    box-shadow: 0 0 10px rgba(255,93,77,0.6);
+  }
+  .ind-pain-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+  .ind-pain-title {
+    font-size: 22px;
+    line-height: 1.25;
+    color: #fff;
+    margin: 0 0 28px;
+    letter-spacing: -0.015em;
+    font-weight: 500;
+  }
+  .ind-pain-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .ind-pain-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    background: rgba(255,93,77,0.04);
+    border: 1px solid rgba(255,93,77,0.12);
+    border-radius: 12px;
+    transition: all 0.3s;
+  }
+  .ind-pain-item:hover {
+    background: rgba(255,93,77,0.06);
+    border-color: rgba(255,93,77,0.2);
+    transform: translateX(2px);
+  }
+  .ind-pain-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(255,93,77,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #ff8a7a;
+  }
+  .ind-pain-icon svg { width: 16px; height: 16px; }
+  .ind-pain-text {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.75);
+  }
+  .ind-pain-text .metric {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #ff8a7a;
+    margin-top: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  /* Arrow divider */
+  .ind-arrow {
+    position: absolute;
+    left: calc(43% - 18px);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple-bright) 0%, #6d45f9 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    box-shadow: 0 0 0 6px rgba(10,8,16,1), 0 0 24px rgba(139,110,230,0.5);
+    animation: ind-arrow-pulse 2.4s ease-in-out infinite;
+  }
+  .ind-arrow svg { width: 14px; height: 14px; color: #fff; }
+  @keyframes ind-arrow-pulse {
+    0%, 100% { box-shadow: 0 0 0 6px rgba(10,8,16,1), 0 0 18px rgba(139,110,230,0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(10,8,16,1), 0 0 30px rgba(139,110,230,0.7); }
+  }
+
+  /* RIGHT COLUMN: Live console */
+  .ind-console {
+    padding: 0;
+    background: linear-gradient(180deg, #0e0b1f 0%, #0a081a 100%);
+    border: 1px solid rgba(139,110,230,0.2);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      0 20px 50px -20px rgba(0,0,0,0.6),
+      0 0 0 1px rgba(139,110,230,0.08) inset,
+      0 0 40px -20px rgba(139,110,230,0.3);
+  }
+  .ind-console-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: rgba(0,0,0,0.3);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .ind-console-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .ind-console-dots {
+    display: flex;
+    gap: 6px;
+  }
+  .ind-console-dots span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+  }
+  .ind-console-dots span:first-child { background: rgba(255,93,77,0.6); }
+  .ind-console-dots span:nth-child(2) { background: rgba(245,180,90,0.6); }
+  .ind-console-dots span:nth-child(3) { background: rgba(110,220,140,0.6); }
+  .ind-console-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.05em;
+    margin-left: 8px;
+  }
+  .ind-console-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(110,220,140,0.85);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .ind-console-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #6edc8c;
+    animation: ind-live 1.6s ease-in-out infinite;
+  }
+  @keyframes ind-live {
+    0%, 100% { opacity: 1; box-shadow: 0 0 6px #6edc8c; }
+    50% { opacity: 0.4; }
+  }
+
+  .ind-console-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .ind-console-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 4px;
+  }
+  .ind-console-header h4 {
+    font-size: 15px;
+    color: #fff;
+    margin: 0;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .ind-console-stats {
+    display: flex;
+    gap: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.05em;
+  }
+  .ind-console-stats span strong {
+    color: #6edc8c;
+    font-weight: 500;
+  }
+
+  /* Agent rows in console */
+  .ind-agent {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 16px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(139,110,230,0.15);
+    border-radius: 12px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .ind-agent:hover {
+    border-color: rgba(139,110,230,0.4);
+    background: rgba(139,110,230,0.05);
+  }
+  .ind-agent::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--purple-bright);
+    box-shadow: 0 0 8px var(--purple-bright);
+  }
+  .ind-agent-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(139,110,230,0.25) 0%, rgba(139,110,230,0.08) 100%);
+    border: 1px solid rgba(139,110,230,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--purple-bright);
+    flex-shrink: 0;
+  }
+  .ind-agent-icon svg { width: 16px; height: 16px; }
+  .ind-agent-body { min-width: 0; }
+  .ind-agent-name {
+    font-size: 13px;
+    color: #fff;
+    margin: 0 0 2px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+  .ind-agent-desc {
+    font-size: 11px;
+    line-height: 1.45;
+    color: rgba(255,255,255,0.55);
+    margin: 0;
+  }
+  .ind-agent-metric {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .ind-agent-metric-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: #6edc8c;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .ind-agent-metric-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* Footer activity ticker */
+  .ind-console-ticker {
+    margin-top: 4px;
+    padding: 10px 14px;
+    background: rgba(0,0,0,0.3);
+    border-top: 1px solid rgba(255,255,255,0.04);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.03em;
+  }
+  .ind-console-ticker-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--purple-bright);
+    flex-shrink: 0;
+    animation: ind-live 1.4s ease-in-out infinite;
+  }
+  .ind-console-ticker-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Mobile */
+  @media (max-width: 940px) {
+    .industries-section { padding: 90px 5vw; }
+    .ind-content {
+      grid-template-columns: 1fr;
+      gap: 60px;
+    }
+    .ind-arrow {
+      left: 50%;
+      top: calc(50% - 30px);
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
+    .ind-content-wrap { min-height: auto; }
+    .ind-content {
+      position: relative;
+      inset: auto;
+    }
+    .ind-pain { padding: 28px; }
+    .ind-console-body { padding: 18px; }
+  }
+  @media (max-width: 540px) {
+    .ind-pill { padding: 10px 16px; font-size: 13px; }
+    .ind-switcher { border-radius: 16px; }
+  }
+</style>
+
+<section class="industries-section" id="industries" data-ai-section="industries" data-ai-message="See it in your sector">
+  <div class="industries-inner">
+    <span class="industries-eyebrow">Industries we serve</span>
+    <h2 class="industries-title">Real workflows in your sector,<br/><span class="accent">not generic automation.</span></h2>
+    <p class="industries-subtitle">Pick the industry closest to yours. We'll show you what your operations look like today, and what changes once Nakera agents are in production.</p>
+
+    <!-- Industry pills -->
+    <div class="ind-switcher" role="tablist">
+      <button class="ind-pill active" data-industry="0" role="tab">
+        <svg class="ind-pill-icon" viewBox="0 0 16 16" fill="none">
+          <rect x="2" y="4" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M2 7h12" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M5 10h2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        FinTech &amp; Banking
+      </button>
+      <button class="ind-pill" data-industry="1" role="tab">
+        <svg class="ind-pill-icon" viewBox="0 0 16 16" fill="none">
+          <path d="M2 12V6l5-3 5 3v6" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+          <path d="M2 12h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          <circle cx="5" cy="14" r="1.2" stroke="currentColor" stroke-width="1.2" fill="none"/>
+          <circle cx="11" cy="14" r="1.2" stroke="currentColor" stroke-width="1.2" fill="none"/>
+        </svg>
+        Logistics &amp; Supply
+      </button>
+      <button class="ind-pill" data-industry="2" role="tab">
+        <svg class="ind-pill-icon" viewBox="0 0 16 16" fill="none">
+          <path d="M2 4h2l1.5 8h7l1.5-6H4" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+          <circle cx="6" cy="14" r="1.2" stroke="currentColor" stroke-width="1.2" fill="none"/>
+          <circle cx="11" cy="14" r="1.2" stroke="currentColor" stroke-width="1.2" fill="none"/>
+        </svg>
+        E-commerce &amp; Retail
+      </button>
+      <button class="ind-pill" data-industry="3" role="tab">
+        <svg class="ind-pill-icon" viewBox="0 0 16 16" fill="none">
+          <path d="M3 6c0-2 1.5-3 3-3s3 1 3 3M8 6c0-2 1.5-3 3-3s2 1 2 3c0 4-5 8-5 8s-5-4-5-8z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+        </svg>
+        Healthcare &amp; Clinics
+      </button>
+    </div>
+
+    <!-- Two-column comparison wrapper -->
+    <div class="ind-content-wrap">
+
+      <!-- ═════════ FINTECH ═════════ -->
+      <div class="ind-content active" data-industry="0">
+
+        <!-- LEFT: Today's reality -->
+        <div class="ind-pain">
+          <div class="ind-pain-header">
+            <span class="ind-pain-dot"></span>
+            <span class="ind-pain-label">Today's reality</span>
+          </div>
+          <h3 class="ind-pain-title">Your compliance and support teams are drowning in repetitive verification and inquiries.</h3>
+          <ul class="ind-pain-list">
+            <li class="ind-pain-item">
+              <span class="ind-pain-icon">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M2 3h12v10H2z" stroke="currentColor" stroke-width="1.4"/><path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              </span>
+              <span class="ind-pain-text">
+                KYC document backlog grows daily
+                <span class="metric">Avg. 48h verification time</span>
+              </span>
+            </li>
+            <li class="ind-pain-item">
+              <span class="ind-pain-icon">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M3 5v6c0 1 .5 2 2 2h6c1.5 0 2-1 2-2V5l-5 4z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              </span>
+              <span class="ind-pain-text">
+                Customer questions about balances, fees, transactions
+                <span class="metric">+300 inquiries / day</span>
+              </span>
+            </li>
+            <li class="ind-pain-item">
+              <span class="ind-pain-icon">
+                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M5 8h6M8 5v6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              </span>
+              <span class="ind-pain-text">
+                Multilingual inquiries (AR, FR, EN) overwhelm small teams
+                <span class="metric">3 languages, 1 support tier</span>
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Arrow connector -->
+        <div class="ind-arrow">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 7h10m0 0L7 2m5 5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+
+        <!-- RIGHT: Nakera in production -->
+        <div class="ind-console">
+          <div class="ind-console-bar">
+            <div class="ind-console-left">
+              <div class="ind-console-dots"><span></span><span></span><span></span></div>
+              <span class="ind-console-title">nakera.console / fintech</span>
+            </div>
+            <div class="ind-console-status">
+              <span class="ind-console-status-dot"></span>
+              Live
+            </div>
+          </div>
+          <div class="ind-console-body">
+            <div class="ind-console-header">
+              <h4>Active agents</h4>
+              <div class="ind-console-stats">
+                <span>RESOLVED <strong>1,247</strong></span>
+                <span>UPTIME <strong>99.8%</strong></span>
+              </div>
+            </div>
+            <div class="ind-agent">
+              <div class="ind-agent-icon">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M3 4h10v8H3z" stroke="currentColor" stroke-width="1.5"/><path d="M5 7h6M5 10h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <div class="ind-agent-body">
+                <p class="ind-agent-name">KYC Processing Agent</p>
+                <p class="ind-agent-desc">Extracts and verifies identity documents in real time</p>
+              </div>
+              <div class="ind-agent-metric">
+                <div class="ind-agent-metric-val">2.4 min</div>
+                <div class="ind-agent-metric-label">avg time</div>
+              </div>
+            </div>
+            <div class="ind-agent">
+              <div class="ind-agent-icon">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M2 12V5c0-1 .5-1.5 1.5-1.5h9c1 0 1.5.5 1.5 1.5v4c0 1-.5 1.5-1.5 1.5H5L2 12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="ind-agent-body">
+                <p class="ind-agent-name">Multilingual Support Assistant</p>
+                <p class="ind-agent-desc">Handles balance, transaction, and fee inquiries in AR / FR / EN</p>
+              </div>
+              <div class="ind-agent-metric">
+                <div class="ind-agent-metric-val">94%</div>
+                <div class="ind-agent-metric-label">resolved</div>
+              </div>
+            </div>
+            <div class="ind-agent">
+              <div class="ind-agent-icon">
+                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 8l1.5 1.5L10 6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="ind-agent-body">
+                <p class="ind-agent-name">Fraud &amp; Account Inquiry Bot</p>
+                <p class="ind-agent-desc">Flags suspicious activity and triages account questions to humans</p>
+              </div>
+              <div class="ind-agent-metric">
+                <div class="ind-agent-metric-val">24/7</div>
+                <div class="ind-agent-metric-label">coverage</div>
+              </div>
+            </div>
+            <div class="ind-console-ticker">
+              <span class="ind-console-ticker-dot"></span>
+              <span class="ind-console-ticker-text">14:32 · KYC verified for client 7491 · 14:31 · AR inquiry resolved in 18s</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ═════════ LOGISTICS ═════════ -->
+      <div class="ind-content" data-industry="1">
+
+        <div class="ind-pain">
+          <div class="ind-pain-header">
+            <span class="ind-pain-dot"></span>
+            <span class="ind-pain-label">Today's reality</span>
+          </div>
+          <h3 class="ind-pain-title">Dispatchers are stuck answering tracking calls instead of solving real operational problems.</h3>
+          <ul class="ind-pain-list">
+            <li class="ind-pain-item">
+              <span class="ind-pain-icon">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M2 11V7l4-3h4l4 3v4" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="5" cy="13" r="1.5" stroke="currentColor" stroke-width="1.4"/><circle cx="11" cy="13" r="1.5" stroke="currentColor" stroke-width="1.4"/></svg>
+              </span>
+              <span class="ind-pain-text">
+                "Where is my shipment?" floods the phone lines
+                <span class="metric">+450 status calls / day</span>
+              </span>
+            </li>
+            <li class="ind-pain-item">
+              <span class="ind-pain-icon">
+                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M8 4v4l3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              </span>
+              <span class="ind-pain-text">
+                Delivery delays trigger angry customer escalations
+                <span class="metric">12% delays = 80% complaints</span>
+              </span>
+            </li>
+            <li class="ind-pain-item">
+              <span class="ind-pain-icon">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M3 3h10v10H3z" stroke="currentColor" stroke-width="1.4"/><path d="M3 7h10M7 3v10" stroke="currentColor" stroke-width="1.4"/></svg>
+              </span>
+              <span class="ind-pain-text">
+                Internal dispatch coordination eats hours of manager time
+                <span class="metric">3+ hours / day on Slack</span>
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="ind-arrow">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 7h10m0 0L7 2m5 5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+
+        <div class="ind-console">
+          <div class="ind-console-bar">
+            <div class="ind-console-left">
+              <div class="ind-console-dots"><span></span><span></span><span></span></div>
+              <span class="ind-console-title">nakera.console / logistics</span>
+            </div>
+            <div class="ind-console-status">
+              <span class="ind-console-status-dot"></span>
+              Live
+            </div>
+          </div>
+          <div class="ind-console-body">
+            <div class="ind-console-header">
+              <h4>Active agents</h4>
+              <div class="ind-console-stats">
+                <span>SHIPMENTS <strong>3,891</strong></span>
+                <span>SLA <strong>97.2%</strong></span>
+              </div>
+            </div>
+            <div class="ind-agent">
+              <div class="ind-agent-icon">
+                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <div class="ind-agent-body">
+                <p class="ind-agent-name">Real-time Tracking Assistant</p>
+                <p class="ind-agent-desc">Answers "where is my shipment" across WhatsApp, SMS, email</p>
+              </div>
+              <div class="ind-agent-metric">
+                <div class="ind-agent-metric-val">8s</div>
+                <div class="ind-agent-metric-label">avg reply</div>
+              </div>
+            </div>
+            <div class="ind-agent">
+              <div class="ind-agent-icon">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M3 4h10v6H3z" stroke="currentColor" stroke-width="1.5"/><path d="M3 7l5 3 5-3" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="ind-agent-body">
+                <p class="ind-agent-name">Proactive Delay Notifier</p>
+                <p class="ind-agent-desc">Detects delays and sends customer updates before they call</p>
+              </div>
+              <div class="ind-agent-metric">
+                <div class="ind-agent-metric-val">-68%</div>
+                <div class="ind-agent-metric-label">complaints</div>
+              </div>
+            </div>
+            <div class="ind-agent">
+              <div class="ind-agent-icon">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M4 4h8v8H4z" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <div class="ind-agent-body">
+                <p class="ind-agent-name">Dispatch Coordinator Bot</p>
+                <p class="ind-agent-desc">Routes internal queries and prioritizes urgent runs automatically</p>
+              </div>
+              <div class="ind-agent-metric">
+                <div class="ind-agent-metric-val">3.1h</div>
+                <div class="ind-agent-metric-label">saved daily</div>
+              </div>
+            </div>
+            <div class="ind-console-ticker">
+              <span class="ind-console-ticker-dot"></span>
+              <span class="ind-console-ticker-text">14:34 · Shipment AE-2210 updated · 14:33 · Customer notified of 20-min delay</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ═════════ E-COMMERCE ═════════ -->
+      <div class="ind-content" data-industry="2">
+
+        <div class="ind-pain">
+          <div class="ind-pain-header">
+            <span class="ind-pain-dot"></span>
+            <span class="ind-pain-label">Today's reality</span>
+          </div>
+          <h3 class="ind-pain-title">Your support inbox is buried under repetitive returns, order status, and product questions.</h3>
+          <ul class="ind-pain-list">
+            <li class="ind-pain-item">
+              <span class="ind-pain-icon">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M3 6v6h10V6" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M2 3h12v3H2z" stroke="currentColor" stroke-width="1.4"/><path d="M6 8h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              </span>
+              <span class="ind-pain-text">
+                Returns and refunds clog the ticket queue
+                <span class="metric">30% of all tickets</span>
+              </span>
+            </li>
+            <li class="ind-pain-item">
+              <span class="ind-pain-icon">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M2 7l6-4 6 4-6 4z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M2 11l6 4 6-4" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              </span>
+              <span class="ind-pain-text">
+                Shoppers ask "which one should I buy" with no easy answer
+                <span class="metric">High bounce on product pages</span>
+              </span>
+            </li>
+            <li class="ind-pain-item">
+              <span class="ind-pain-icon">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M2 8a6 6 0 1112 0 6 6 0 01-12 0z" stroke="currentColor" stroke-width="1.4"/><path d="M8 5v3l2 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              </span>
+              <span class="ind-pain-text">
+                Order status inquiries arrive at all hours
+                <span class="metric">40% outside business hours</span>
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="ind-arrow">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 7h10m0 0L7 2m5 5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+
+        <div class="ind-console">
+          <div class="ind-console-bar">
+            <div class="ind-console-left">
+              <div class="ind-console-dots"><span></span><span></span><span></span></div>
+              <span class="ind-console-title">nakera.console / ecommerce</span>
+            </div>
+            <div class="ind-console-status">
+              <span class="ind-console-status-dot"></span>
+              Live
+            </div>
+          </div>
+          <div class="ind-console-body">
+            <div class="ind-console-header">
+              <h4>Active agents</h4>
+              <div class="ind-console-stats">
+                <span>TICKETS <strong>2,103</strong></span>
+                <span>CSAT <strong>4.8/5</strong></span>
+              </div>
+            </div>
+            <div class="ind-agent">
+              <div class="ind-agent-icon">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M3 5h10v8H3z" stroke="currentColor" stroke-width="1.5"/><path d="M3 5l5-3 5 3" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="ind-agent-body">
+                <p class="ind-agent-name">Return Handling System</p>
+                <p class="ind-agent-desc">Processes refund requests, generates labels, updates inventory</p>
+              </div>
+              <div class="ind-agent-metric">
+                <div class="ind-agent-metric-val">-72%</div>
+                <div class="ind-agent-metric-label">manual work</div>
+              </div>
+            </div>
+            <div class="ind-agent">
+              <div class="ind-agent-icon">
+                <svg viewBox="0 0 16 16" fill="none"><circle cx="6" cy="7" r="2.5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <div class="ind-agent-body">
+                <p class="ind-agent-name">Product Recommendation AI</p>
+                <p class="ind-agent-desc">Guides shoppers based on intent, budget, and past purchases</p>
+              </div>
+              <div class="ind-agent-metric">
+                <div class="ind-agent-metric-val">+34%</div>
+                <div class="ind-agent-metric-label">conversion</div>
+              </div>
+            </div>
+            <div class="ind-agent">
+              <div class="ind-agent-icon">
+                <svg viewBox="0 0 16 16" fill="none"><rect x="3" y="3" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 8l1.5 1.5L10 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="ind-agent-body">
+                <p class="ind-agent-name">Order Tracking Chatbot</p>
+                <p class="ind-agent-desc">24/7 order status updates across web, WhatsApp, Instagram DM</p>
+              </div>
+              <div class="ind-agent-metric">
+                <div class="ind-agent-metric-val">24/7</div>
+                <div class="ind-agent-metric-label">coverage</div>
+              </div>
+            </div>
+            <div class="ind-console-ticker">
+              <span class="ind-console-ticker-dot"></span>
+              <span class="ind-console-ticker-text">14:35 · Return processed for order 8821 · 14:34 · Product matched for shopper "summer dress"</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ═════════ HEALTHCARE ═════════ -->
+      <div class="ind-content" data-industry="3">
+
+        <div class="ind-pain">
+          <div class="ind-pain-header">
+            <span class="ind-pain-dot"></span>
+            <span class="ind-pain-label">Today's reality</span>
+          </div>
+          <h3 class="ind-pain-title">Reception staff spend their days on phone calls instead of caring for in-clinic patients.</h3>
+          <ul class="ind-pain-list">
+            <li class="ind-pain-item">
+              <span class="ind-pain-icon">
+                <svg viewBox="0 0 16 16" fill="none"><rect x="3" y="3" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M3 6h10M6 3v3M10 3v3" stroke="currentColor" stroke-width="1.4"/></svg>
+              </span>
+              <span class="ind-pain-text">
+                Appointment booking eats entire shifts
+                <span class="metric">+180 calls / day</span>
+              </span>
+            </li>
+            <li class="ind-pain-item">
+              <span class="ind-pain-icon">
+                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M8 5v3M8 11h.01" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              </span>
+              <span class="ind-pain-text">
+                Same questions asked over and over (hours, prices, prep)
+                <span class="metric">70% of inquiries are FAQ</span>
+              </span>
+            </li>
+            <li class="ind-pain-item">
+              <span class="ind-pain-icon">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M5 3v10M3 5h4M11 8a2 2 0 110 4 2 2 0 010-4z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              </span>
+              <span class="ind-pain-text">
+                Doctors waste time on unqualified consultations
+                <span class="metric">30% no-shows or wrong-fit</span>
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="ind-arrow">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 7h10m0 0L7 2m5 5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+
+        <div class="ind-console">
+          <div class="ind-console-bar">
+            <div class="ind-console-left">
+              <div class="ind-console-dots"><span></span><span></span><span></span></div>
+              <span class="ind-console-title">nakera.console / healthcare</span>
+            </div>
+            <div class="ind-console-status">
+              <span class="ind-console-status-dot"></span>
+              Live
+            </div>
+          </div>
+          <div class="ind-console-body">
+            <div class="ind-console-header">
+              <h4>Active agents</h4>
+              <div class="ind-console-stats">
+                <span>BOOKINGS <strong>586</strong></span>
+                <span>NO-SHOWS <strong>-41%</strong></span>
+              </div>
+            </div>
+            <div class="ind-agent">
+              <div class="ind-agent-icon">
+                <svg viewBox="0 0 16 16" fill="none"><rect x="3" y="4" width="10" height="9" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M3 7h10M6 4V2M10 4V2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <div class="ind-agent-body">
+                <p class="ind-agent-name">AI Booking Assistant</p>
+                <p class="ind-agent-desc">Books, reschedules, and confirms appointments across all channels</p>
+              </div>
+              <div class="ind-agent-metric">
+                <div class="ind-agent-metric-val">3.2 min</div>
+                <div class="ind-agent-metric-label">saved per call</div>
+              </div>
+            </div>
+            <div class="ind-agent">
+              <div class="ind-agent-icon">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M2 12V5c0-1 .5-1.5 1.5-1.5h9c1 0 1.5.5 1.5 1.5v4c0 1-.5 1.5-1.5 1.5H5L2 12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="ind-agent-body">
+                <p class="ind-agent-name">FAQ Responder</p>
+                <p class="ind-agent-desc">Handles hours, prices, preparation, parking, insurance questions</p>
+              </div>
+              <div class="ind-agent-metric">
+                <div class="ind-agent-metric-val">94%</div>
+                <div class="ind-agent-metric-label">deflected</div>
+              </div>
+            </div>
+            <div class="ind-agent">
+              <div class="ind-agent-icon">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M8 2v3M5 5l-2 2M11 5l2 2M8 8a3 3 0 100 6 3 3 0 000-6z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <div class="ind-agent-body">
+                <p class="ind-agent-name">Pre-Consultation Screening Bot</p>
+                <p class="ind-agent-desc">Qualifies patients, gathers symptoms, prepares the practitioner</p>
+              </div>
+              <div class="ind-agent-metric">
+                <div class="ind-agent-metric-val">-41%</div>
+                <div class="ind-agent-metric-label">no-shows</div>
+              </div>
+            </div>
+            <div class="ind-console-ticker">
+              <span class="ind-console-ticker-dot"></span>
+              <span class="ind-console-ticker-text">14:36 · Appointment booked for Tuesday 10am · 14:35 · Pre-screening completed for new patient</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function() {
+  const pills = document.querySelectorAll('.ind-pill');
+  const contents = document.querySelectorAll('.ind-content');
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const idx = pill.dataset.industry;
+      pills.forEach(p => p.classList.toggle('active', p.dataset.industry === idx));
+      contents.forEach(c => c.classList.toggle('active', c.dataset.industry === idx));
+    });
+  });
+})();
+</script>
+<!-- ════════ END INDUSTRIES SECTION ════════ -->
+
+
+<!-- FOUNDERS (white inverted section like Yara's CTA) -->
+<section class="founders-section" id="founders" data-ai-section="founders" data-ai-message="Meet the founders">
+  <div class="founders-inner">
+    <div class="founders-headline">
+      <h2>Operators and <span class="serif">builders</span>.<br/>Not consultants.</h2>
+      <p>Two founders. A decade of product and operations experience across Chanel, Thales, Airtel Africa, and BNP Paribas. We build what we'd want to use.</p>
+      <a href="#cta" class="btn-primary cta-trigger">
+        Meet the team
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12m0 0L7 1m6 6l-6 6" stroke="currentColor" stroke-width="1.5"/></svg>
+      </a>
+    </div>
+    <div class="founders-cards">
+      <div class="founder-card">
+        <div class="founder-avatar">NB</div>
+        <div class="founder-role">Co-founder · CEO</div>
+        <h3 class="founder-name">Naomie Bella</h3>
+        <p class="founder-bio">Senior product leader from Chanel, BNP Paribas, and currently Thales Middle East. Leads strategy and product standards.</p>
+        <div class="founder-tags">
+          <span class="tag">Dubai</span>
+          <span class="tag">EN · FR</span>
+          <span class="tag">Thales · Chanel</span>
+        </div>
+      </div>
+      <div class="founder-card">
+        <div class="founder-avatar">KI</div>
+        <div class="founder-role">Co-founder · CPO</div>
+        <h3 class="founder-name">Kerân Ilunga</h3>
+        <p class="founder-bio">Operations and process specialist from Airtel Africa. Trilingual. Leads product and the integration work that makes agents reliable.</p>
+        <div class="founder-tags">
+          <span class="tag">Dubai</span>
+          <span class="tag">EN · FR · SW</span>
+          <span class="tag">Airtel Africa</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features" data-ai-section="features" data-ai-message="Why teams choose us">
+  <div class="features-lights">
+    <div class="light-beam beam-1"></div>
+    <div class="light-beam beam-2"></div>
+  </div>
+  <div class="features-inner">
+    <div class="features-headline reveal">
+      <h2>Unlock operational <span class="serif">efficiency</span></h2>
+      <p>Nakera lets you take complex product ideas and quickly bring them to life through intelligent flows that anyone can understand.</p>
+    </div>
+    <div class="features-grid reveal">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M7 12q5 5 10 0" stroke-linecap="round"/>
+            <circle cx="9" cy="10" r="0.8" fill="currentColor"/>
+            <circle cx="15" cy="10" r="0.8" fill="currentColor"/>
+          </svg>
+        </div>
+        <h3>Intelligent by design</h3>
+        <p>Deliver clear, role-specific agents to staff with no distraction from their daily workflows.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 12h18M12 3v18" stroke-linecap="round"/>
+            <rect x="5" y="5" width="14" height="14" rx="2"/>
+          </svg>
+        </div>
+        <h3>Fast &amp; secure deployment</h3>
+        <p>Get started in days, on-prem or cloud. Production-ready with minimal integration effort.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="9" cy="8" r="3"/>
+            <circle cx="17" cy="10" r="2"/>
+            <path d="M3 20c0-3 3-5 6-5s6 2 6 5M19 18c0-2 2-3 4-3"/>
+          </svg>
+        </div>
+        <h3>Built for your team</h3>
+        <p>Our founders work side-by-side with your operations or IT departments from day one.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 20l5-5 4 4 7-9" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 10h5v5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>Proven outcomes</h3>
+        <p>Cut costs, boost speed, and improve team satisfaction; all with one AI-first platform.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-final" id="cta" data-ai-section="contact" data-ai-message="Ready to talk?">
+  <div class="cta-inner">
+    <div class="cta-headline">
+      <h2>Enterprise-grade<br/><span class="serif">Agentic AI</span></h2>
+      <p class="cta-sub">A 30-minute conversation. We'll map where agents create real leverage in your operation; and what it takes to ship.</p>
+      <a href="#" class="btn-primary cta-trigger">
+        Get in touch now
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12m0 0L7 1m6 6l-6 6" stroke="currentColor" stroke-width="1.5"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">
+      <a href="#" class="nav-logo">
+        <svg><use href="#logo-mark"/></svg>
+        Nakera
+      </a>
+      <span class="tagline">Agentic AI for modern operations</span>
+    </div>
+    <div class="footer-right">
+      <span>© 2026 Nakera AI · Dubai · </span>
+      <a href="mailto:hello@nakera.io">hello@nakera.io</a>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-backdrop" id="demo-modal" role="dialog" aria-modal="true">
+  <div class="modal" id="modal-inner">
+    <button class="modal-close" id="modal-close" aria-label="Close">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <h2 class="modal-title">Let's <em class="serif">build</em><br/>your AI workforce.</h2>
+    <p class="modal-sub">Tell us a bit about your operation. We'll reply within 24 hours.</p>
+
+    <form class="modal-form" id="demo-form" novalidate>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="f-name">Name</label>
+          <input type="text" id="f-name" name="name" placeholder="Your full name" required autocomplete="name" />
+        </div>
+        <div class="form-field">
+          <label for="f-company">Company</label>
+          <input type="text" id="f-company" name="company" placeholder="Your company" required autocomplete="organization" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="f-email">Work email</label>
+        <input type="email" id="f-email" name="email" placeholder="you@company.com" required autocomplete="email" />
+      </div>
+      <div class="form-field">
+        <label for="f-phone">Phone <span class="optional">(optional)</span></label>
+        <input type="tel" id="f-phone" name="phone" placeholder="+971 50 000 0000" autocomplete="tel" />
+      </div>
+      <div class="form-field">
+        <label for="f-message">What are you trying to automate?</label>
+        <textarea id="f-message" name="message" placeholder="A few sentences on the use case." required></textarea>
+      </div>
+      <button type="submit" class="modal-submit" id="form-submit">
+        <span class="submit-label">Send request</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12m0 0L7 1m6 6l-6 6" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+      <p class="modal-foot">No spam. We reply personally within 24 hours.</p>
+    </form>
+
+    <div class="modal-success">
+      <div class="success-mark">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <path d="M4 11l5 5 9-11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h3 class="success-title">Request received.</h3>
+      <p class="success-text">One of the founders will personally reply within 24 hours.</p>
+      <button type="button" class="modal-submit" id="modal-done" style="max-width:200px;margin:0 auto;">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // Reveal on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Sticky scroll text active state
+  const scrollItems = document.querySelectorAll('.scroll-item');
+  const scrollGroups = document.querySelectorAll('.scroll-image-group');
+  const stickyObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+        const idx = Array.from(scrollGroups).indexOf(entry.target);
+        scrollItems.forEach((it, i) => it.classList.toggle('active', i === idx));
+      }
+    });
+  }, { threshold: [0.5] });
+  scrollGroups.forEach(g => stickyObs.observe(g));
+
+  // Modal
+  const modal = document.getElementById('demo-modal');
+  const modalInner = document.getElementById('modal-inner');
+  const closeBtn = document.getElementById('modal-close');
+  const doneBtn = document.getElementById('modal-done');
+  const form = document.getElementById('demo-form');
+  const submitBtn = document.getElementById('form-submit');
+  const submitLabel = submitBtn.querySelector('.submit-label');
+
+  function openModal(e) {
+    if (e) e.preventDefault();
+    modal.classList.add('open');
+    document.body.classList.add('modal-open');
+    setTimeout(() => document.getElementById('f-name')?.focus(), 300);
+  }
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.classList.remove('modal-open');
+    setTimeout(() => modalInner.classList.remove('success'), 400);
+  }
+  document.querySelectorAll('.cta-trigger, a.nav-cta, a[href="#cta"]').forEach(el => {
+    el.addEventListener('click', openModal);
+  });
+  closeBtn.addEventListener('click', closeModal);
+  doneBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+  });
+
+  // Formspree
+  const FORMSPREE_ENDPOINT = 'https://zeblacki.app.n8n.cloud/webhook/nakera-lead';
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+      name: form.name.value.trim(),
+      company: form.company.value.trim(),
+      email: form.email.value.trim(),
+      phone: form.phone.value.trim(),
+      message: form.message.value.trim()
+    };
+    if (!data.name || !data.company || !data.email || !data.message) {
+      submitLabel.textContent = 'Please fill all fields';
+      setTimeout(() => { submitLabel.textContent = 'Send request'; }, 2000);
+      return;
+    }
+    submitBtn.disabled = true;
+    submitLabel.textContent = 'Sending…';
+    try {
+      const r = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (r.ok) { modalInner.classList.add('success'); form.reset(); }
+      else throw new Error();
+    } catch {
+      submitLabel.textContent = 'Try again';
+      setTimeout(() => { submitLabel.textContent = 'Send request'; }, 2500);
+    } finally { submitBtn.disabled = false; }
+  });
+</script>
+
+<!-- ============================================================
+     AI ASSISTANT; FLOATING HEAD LAUNCHER + CONSULTANT PANEL
+     ============================================================ -->
+
+<!-- Launcher (the head) -->
+<button id="nai-launcher" aria-label="Open AI assistant">
+  <span class="nai-tip" id="nai-tip">Ask me anything about AI agents</span>
+  <span class="nai-float">
+    <span class="nai-halo"></span>
+    <span class="nai-pulse" id="nai-pulse"></span>
+    <span class="nai-head">
+      <svg class="nai-face" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="14" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="1.6"/>
+        <circle class="nai-eye" cx="15" cy="19" r="1.8"/>
+        <circle class="nai-eye" cx="25" cy="19" r="1.8"/>
+        <line x1="16" y1="26" x2="24" y2="26" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+    </span>
+  </span>
+</button>
+
+<!-- Chat panel -->
+<div id="nai-panel" role="dialog" aria-modal="false" aria-label="AI assistant chat">
+  <div class="nai-phead">
+    <span class="nai-pavatar">
+      <svg viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="14" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="1.6"/>
+        <circle class="nai-eye" cx="15" cy="19" r="1.8"/>
+        <circle class="nai-eye" cx="25" cy="19" r="1.8"/>
+        <line x1="16" y1="26" x2="24" y2="26" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+    </span>
+    <div class="nai-ptitle">
+      <h4><span class="nai-status-dot"></span> Nakera Assistant</h4>
+      <p>AI strategy · online</p>
+    </div>
+    <button class="nai-pclose" id="nai-close" aria-label="Close">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <path d="M1 1l11 11M12 1L1 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="nai-msgs" id="nai-msgs"></div>
+
+  <div class="nai-suggest" id="nai-suggest"></div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ---- ELEMENTS ---- */
+  const launcher = document.getElementById('nai-launcher');
+  const panel    = document.getElementById('nai-panel');
+  const closeBtn = document.getElementById('nai-close');
+  const msgs     = document.getElementById('nai-msgs');
+  const suggest  = document.getElementById('nai-suggest');
+  const tip      = document.getElementById('nai-tip');
+  const pulse    = document.getElementById('nai-pulse');
+  const eyes     = document.querySelectorAll('.nai-eye');
+
+  /* ---- KNOWLEDGE BASE ----
+     Strategist-voiced answers. Each entry has trigger keywords and a reply.
+     Matching is keyword-overlap scored; best match above threshold wins,
+     otherwise we fall back to the "our team can help" + CTA response.       */
+  const KB = [
+    {
+      id: 'what-are-agents',
+      label: 'What are AI agents?',
+      keywords: ['what','are','ai','agent','agents','define','definition','mean','meaning'],
+      reply: `<strong>AI agents</strong> are autonomous software workers that don't just answer questions; they take action. Unlike a chatbot that waits for prompts, an agent can read a request, decide what to do, use your tools (CRM, email, calendar, databases), and complete the task end-to-end.<br><br>Think of them as digital employees: each one owns a defined role; handling support tickets, qualifying leads, processing invoices; and works around the clock without supervision.`
+    },
+    {
+      id: 'help-business',
+      label: 'How can AI agents help my business?',
+      keywords: ['help','business','company','benefit','benefits','value','grow','growth','use'],
+      reply: `AI agents create leverage in three places:<br><br><strong>1. Speed</strong>; work that took hours happens in seconds, around the clock.<br><strong>2. Cost</strong>; one agent handles the repetitive volume of several full-time roles.<br><strong>3. Consistency</strong>; no fatigue, no dropped follow-ups, every interaction on-brand.<br><br>The highest-ROI starting points are usually customer support, lead qualification, and back-office operations. We map your specific bottlenecks before deploying anything.`
+    },
+    {
+      id: 'tasks-automate',
+      label: 'What tasks can AI automate?',
+      keywords: ['task','tasks','automate','automation','automated','what','can','do','workflow','workflows'],
+      reply: `Strong candidates for automation share a pattern: high-volume, rule-based, and repetitive. Common deployments include:<br><br>• <strong>Customer support</strong>; answering FAQs, triaging tickets, escalating edge cases<br>• <strong>Sales</strong>; qualifying inbound leads, booking meetings, CRM updates<br>• <strong>Operations</strong>; invoice processing, scheduling, data entry, reporting<br>• <strong>Internal</strong>; onboarding, knowledge retrieval, status updates<br><br>We typically start with one high-impact workflow, prove the ROI, then expand.`
+    },
+    {
+      id: 'reduce-costs',
+      label: 'How can AI reduce operational costs?',
+      keywords: ['reduce','cost','costs','operational','save','saving','savings','cheaper','expensive','budget','money'],
+      reply: `AI agents lower operating costs in a few concrete ways:<br><br>• <strong>Headcount leverage</strong>; automating repetitive volume means teams scale output without scaling hires.<br>• <strong>Faster cycle times</strong>; resolution that took hours drops to seconds, freeing skilled staff for higher-value work.<br>• <strong>Fewer errors</strong>; consistent execution reduces costly rework and missed follow-ups.<br><br>Most clients see the clearest savings in support and back-office functions. We'd model your specific numbers in a short consultation.`
+    },
+    {
+      id: 'customer-support',
+      label: 'How can AI improve customer support?',
+      keywords: ['customer','support','service','ticket','tickets','help','desk','response','reply','satisfaction','csat'],
+      reply: `In customer support, AI agents deliver three things human teams struggle to do at once:<br><br>• <strong>Instant response</strong>, 24/7, in multiple languages<br>• <strong>Resolution, not deflection</strong>; agents act on requests (look up orders, process changes, book appointments), not just point to articles<br>• <strong>Seamless escalation</strong>; complex or sensitive cases hand off to your team with full context attached<br><br>The result is faster resolution times and higher satisfaction, while your team focuses on the conversations that genuinely need a human.`
+    },
+    {
+      id: 'productivity',
+      label: 'How can AI agents increase productivity?',
+      keywords: ['productivity','productive','efficient','efficiency','increase','improve','team','output','faster','scale'],
+      reply: `AI agents raise productivity by removing the low-value work that fragments your team's day:<br><br>• <strong>They absorb the repetitive load</strong>; the tickets, data entry, and follow-ups that interrupt focused work.<br>• <strong>They operate in parallel</strong>; handling hundreds of tasks simultaneously, never queuing.<br>• <strong>They free your specialists</strong>; people spend time on strategy, relationships, and judgment calls instead of busywork.<br><br>The compounding effect: the same headcount delivers significantly more, with less burnout.`
+    },
+  ];
+
+  /* greeting + which chips to show */
+  const SUGGESTED = [
+    'What are AI agents?',
+    'How can AI agents help my business?',
+    'What tasks can AI automate?',
+    'How can AI reduce operational costs?',
+    'How can AI improve customer support?',
+    'How can AI agents increase productivity?',
+  ];
+
+  const STOPWORDS = new Set(['the','a','an','my','our','your','for','to','of','in','on','is','it','i','me','we','us','and','or','can','how','what','do','does']);
+
+  /* ---- MATCHING ---- */
+  function findAnswer(text) {
+    const words = text.toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(w => w && !STOPWORDS.has(w));
+    let best = null, bestScore = 0;
+    for (const entry of KB) {
+      let score = 0;
+      for (const w of words) {
+        if (entry.keywords.includes(w)) score += 1;
+        // partial stem match (e.g. "automating" -> "automate")
+        else if (entry.keywords.some(k => k.length > 4 && (w.startsWith(k.slice(0,4)) || k.startsWith(w.slice(0,4))))) score += 0.5;
+      }
+      // normalize a little by how distinctive the match is
+      if (score > bestScore) { bestScore = score; best = entry; }
+    }
+    // require a minimum signal to avoid false positives
+    return bestScore >= 1.5 ? best : null;
+  }
+
+  /* ---- RENDERING ---- */
+
+  function scrollDown() {
+    requestAnimationFrame(() => { msgs.scrollTop = msgs.scrollHeight; });
+  }
+
+  function addUser(text) {
+    const el = document.createElement('div');
+    el.className = 'nai-msg user';
+    el.textContent = text;
+    msgs.appendChild(el);
+    scrollDown();
+  }
+
+  function addBot(html, withCTA = false) {
+    const el = document.createElement('div');
+    el.className = 'nai-msg bot';
+    el.innerHTML = html;
+    if (withCTA) {
+      const btn = document.createElement('button');
+      btn.className = 'nai-msg-cta';
+      btn.innerHTML = `Book a Consultation <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M1 7h12m0 0L7 1m6 6l-6 6" stroke="currentColor" stroke-width="1.5"/></svg>`;
+      btn.addEventListener('click', () => {
+        closePanel();
+        // reuse the site's existing contact modal
+        document.querySelector('.cta-trigger, a[href="#cta"]')?.click();
+      });
+      el.appendChild(btn);
+    }
+    msgs.appendChild(el);
+    scrollDown();
+  }
+
+  function showTyping() {
+    const t = document.createElement('div');
+    t.className = 'nai-typing';
+    t.id = 'nai-typing';
+    t.innerHTML = '<span></span><span></span><span></span>';
+    msgs.appendChild(t);
+    scrollDown();
+    return t;
+  }
+
+  function respond(text) {
+    const match = findAnswer(text);
+    const typing = showTyping();
+    // realistic delay scaled a little to answer length
+    const delay = 700 + Math.random() * 600;
+    setTimeout(() => {
+      typing.remove();
+      if (match) {
+        addBot(match.reply);
+      } else {
+        // Should not happen now that input is button-only, but keep a useful fallback
+        addBot(
+          `Great topic. The best way to get a precise answer is a quick conversation with our team; we'll map it to your specific operation. <strong>Tap "Book a consultation" below</strong> and we'll be in touch.`,
+          true
+        );
+      }
+    }, delay);
+  }
+
+  function renderSuggestions() {
+    suggest.innerHTML = '';
+    SUGGESTED.forEach(q => {
+      const chip = document.createElement('button');
+      chip.className = 'nai-chip';
+      chip.textContent = q;
+      chip.addEventListener('click', () => {
+        ask(q);
+      });
+      suggest.appendChild(chip);
+    });
+  }
+
+  function ask(text) {
+    const clean = text.trim();
+    if (!clean) return;
+    addUser(clean);
+    respond(clean);
+  }
+
+  /* ---- OPEN / CLOSE ---- */
+  let greeted = false;
+  function openPanel() {
+    document.body.classList.add('nai-open');
+    hideTip();
+    if (!greeted) {
+      greeted = true;
+      setTimeout(() => {
+        addBot(`Hello, I'm Nakera's AI strategy assistant. Pick a question below to get started, or tap "Book a consultation" to reach our team directly.`);
+      }, 350);
+    }
+  }
+  function closePanel() {
+    document.body.classList.remove('nai-open');
+  }
+
+  launcher.addEventListener('click', openPanel);
+  closeBtn.addEventListener('click', closePanel);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.body.classList.contains('nai-open')) closePanel();
+  });
+
+  /* ---- IDLE LIFE: blink, pulse, entrance, first-time tip ---- */
+  function blink() {
+    eyes.forEach(el => el.classList.add('blink'));
+    setTimeout(() => eyes.forEach(el => el.classList.remove('blink')), 160);
+  }
+  function scheduleBlink() {
+    setTimeout(() => { blink(); scheduleBlink(); }, 3000 + Math.random() * 4000);
+  }
+  function schedulePulse() {
+    setTimeout(() => {
+      pulse.classList.remove('go'); void pulse.offsetWidth; pulse.classList.add('go');
+      schedulePulse();
+    }, 7000 + Math.random() * 9000);
+  }
+
+  function showTip()  { tip.classList.add('show'); }
+  function hideTip()  { tip.classList.remove('show'); }
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // first-time tip, then auto-hide
+  setTimeout(() => { if (!document.body.classList.contains('nai-open')) { showTip(); } }, 3200);
+  setTimeout(hideTip, 9000);
+
+  if (!reduced) { scheduleBlink(); schedulePulse(); }
+
+  renderSuggestions();
+
+  /* expose tiny API */
+  window.NakeraAssistant = { open: openPanel, close: closePanel, ask };
+})();
+</script>
+
+
+</body>
+</html>
